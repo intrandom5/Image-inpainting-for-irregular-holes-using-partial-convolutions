@@ -2,6 +2,8 @@
 
 This repository contains the PyTorch implementation of the paper **"Image Inpainting for Irregular Holes with Partial Convolution."**
 
+https://arxiv.org/pdf/1804.07723
+
 ## Prerequisites
 - This code assumes input images are in PNG format and have a resolution of 256x256 pixels.
 - If you wish to use images with different resolutions or formats, modify the `main.py` and the `get_loader` method in `dataset.py` accordingly.
