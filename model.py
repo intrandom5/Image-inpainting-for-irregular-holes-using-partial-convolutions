@@ -31,7 +31,7 @@ class PartialConv2d(nn.Module):
         mask_ratio = self.kernel_size**2 / (mask_out + 1e-8)
         mask_ratio = mask_ratio * mask_out
 
-        img_out = img_out * mask_out  # Ensure the output is zero where mask is zero
+        img_out = img_out * mask_ratio  # Ensure the output is zero where mask is zero
 
         return img_out, mask_out
     

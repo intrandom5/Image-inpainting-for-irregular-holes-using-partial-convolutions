@@ -96,6 +96,17 @@ class PartialUNetLoss(nn.Module):
         gram = gram / (c * h * w + 1e-8)
         return self.remove_inf_nan(gram)
     
+    def get_vgg_loss(self, tgt_pools, out_pools, comp_pools):
+        perceptual_loss = 0
+        style_loss = 0
+        for tgt, out, comp in zip(tgt_pools, out_pools, comp_pools):
+            perceptual_loss += F.l1_loss(out, tgt)
+            perceptual_loss += F.l1_loss(comp, tgt)
+            out_gram = self.gram_matrix(out)
+            tgt_gram = self.gram_matrix(tgt)
+            style_loss += F.l1_loss(out_gram, tgt_gram)
+        return perceptual_loss, style_loss
+    
     def forward(self, pred_img, target_img, mask):
         comp_img = self.get_comp_img(pred_img, target_img, mask)
 
@@ -109,14 +120,7 @@ class PartialUNetLoss(nn.Module):
         comp_pools = self.vgg_pooling(comp_img)
 
         # perceptual loss & style loss
-        perceptual_loss = 0
-        style_loss = 0
-        for tgt, out, comp in zip(tgt_pools, out_pools, comp_pools):
-            perceptual_loss += F.l1_loss(out, tgt)
-            perceptual_loss += F.l1_loss(comp, tgt)
-            out_gram = self.gram_matrix(out)
-            tgt_gram = self.gram_matrix(tgt)
-            style_loss += F.l1_loss(out_gram, tgt_gram)
+        perceptual_loss, style_loss = self.get_vgg_loss(tgt_pools, out_pools, comp_pools)
 
         # total variation loss
         tv_loss = self.total_variation_loss(mask, comp_img)
