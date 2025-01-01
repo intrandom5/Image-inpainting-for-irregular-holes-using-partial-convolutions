@@ -1,0 +1,5 @@
+tensorboard>=2.0
+pytorch-msssim>=0.2.1
+pillow>=8.0.0
+scikit-learn
+opencv-python

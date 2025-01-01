@@ -1,0 +1,13 @@
+##### directory setting #####
+train_dir: "train_gt"
+valid_dir: "valid_gt"
+log_dir: "./results/Partial-UNet/irregular-mask/Full-training"
+
+##### test parameter #####
+num_epochs: 5
+batch_size: 16
+generator_lr: 0.0001
+loss_weights: [1, 6, 0.05, 120, 0.1] # [valid, hole, perceptual, style, tv]
+
+##### others #####
+test : False
